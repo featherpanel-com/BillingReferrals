@@ -1,0 +1,29 @@
+{
+  "client": {
+    "/earn/referrals": {
+      "name": "Referrals",
+      "icon": "🎁",
+      "lucideIcon": "gift",
+      "showBadge": false,
+      "redirect": "/earn/referrals",
+      "component": "/billingreferrals/dist/referrals.html",
+      "description": "Invite friends and earn credits",
+      "category": "client",
+      "group": "Earn Credits"
+    }
+  },
+  "admin": {
+    "/billingreferrals": {
+      "name": "Referral System",
+      "icon": "🎁",
+      "lucideIcon": "gift",
+      "showBadge": false,
+      "redirect": "/billingreferrals",
+      "component": "/billingreferrals/dist/admin.html",
+      "description": "Manage referral system settings and view statistics",
+      "category": "admin",
+      "group": "Fremium Earn Credits"
+    }
+  },
+  "server": {}
+}

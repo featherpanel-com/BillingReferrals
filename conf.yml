@@ -1,0 +1,19 @@
+plugin:
+  name: BillingReferrals
+  identifier: billingreferrals
+  description: 'A powerful referral system that rewards users with credits for inviting new users to the platform!'
+  flags:
+    - hasEvents
+  version: 1.0.0
+  target: v2
+  author:
+    - NaysKutzu
+    - MythicalSystems
+  icon: 'https://cdn.mythical.systems/featherpanel/paid.png'
+  requiredConfigs: {  }
+  dependencies:
+    - php=8.5
+    - php-ext=pdo
+    - plugin=billingcore
+    - plugin=billingplans
+config: {  }
