@@ -19,11 +19,11 @@ namespace App\Addons\billingreferrals\Controllers\Admin;
 
 use App\Helpers\ApiResponse;
 use OpenApi\Attributes as OA;
-use App\Addons\billingreferrals\Chat\ReferralCode;
 use Symfony\Component\HttpFoundation\Request;
-use App\Addons\billingreferrals\Chat\ReferralUsage;
 use Symfony\Component\HttpFoundation\Response;
 use App\Addons\billingcore\Helpers\CurrencyHelper;
+use App\Addons\billingreferrals\Chat\ReferralCode;
+use App\Addons\billingreferrals\Chat\ReferralUsage;
 use App\Addons\billingreferrals\Helpers\ReferralHelper;
 
 #[OA\Tag(name: 'Admin - Billing Referrals', description: 'Referral system administration')]

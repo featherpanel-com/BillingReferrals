@@ -18,8 +18,8 @@
 namespace App\Addons\billingreferrals\Chat;
 
 use App\App;
-use App\Chat\Database;
 use App\Chat\User;
+use App\Chat\Database;
 
 /**
  * Referral Code chat model for managing user referral codes.
@@ -338,7 +338,7 @@ class ReferralCode
     {
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $code = '';
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 8; ++$i) {
             $code .= $chars[random_int(0, strlen($chars) - 1)];
         }
 

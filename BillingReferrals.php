@@ -20,10 +20,10 @@ namespace App\Addons\billingreferrals;
 use App\App;
 use App\Plugins\AppPlugin;
 use App\Plugins\Events\Events\AuthEvent;
-use App\Addons\billingreferrals\Helpers\ReferralHelper;
+use App\Addons\billingcore\Helpers\CreditsHelper;
 use App\Addons\billingreferrals\Chat\ReferralCode;
 use App\Addons\billingreferrals\Chat\ReferralUsage;
-use App\Addons\billingcore\Helpers\CreditsHelper;
+use App\Addons\billingreferrals\Helpers\ReferralHelper;
 
 class BillingReferrals implements AppPlugin
 {
@@ -38,6 +38,23 @@ class BillingReferrals implements AppPlugin
         $event->on(\App\Plugins\Events\Events\UserEvent::onUserCreated(), function (array $data) {
             self::processNewUserRegistration($data['user_data'] ?? $data);
         });
+    }
+
+    public static function pluginInstall(): void
+    {
+        // Plugin installation logic
+        // Tables will be created via migrations
+    }
+
+    public static function pluginUpdate(?string $oldVersion, ?string $newVersion): void
+    {
+        // Plugin update logic
+    }
+
+    public static function pluginUninstall(): void
+    {
+        // Plugin uninstallation logic
+        // Clean up is handled by the migration system
     }
 
     /**
@@ -151,7 +168,7 @@ class BillingReferrals implements AppPlugin
             self::clearReferralCodeFromSession();
 
             App::getInstance(true)->getLogger()->info(
-                'Referral processed successfully. Code: ' . $referralCode . ', New user: ' . $userId . 
+                'Referral processed successfully. Code: ' . $referralCode . ', New user: ' . $userId .
                 ', Referrer: ' . $code['user_id']
             );
         } catch (\Exception $e) {
@@ -190,22 +207,5 @@ class BillingReferrals implements AppPlugin
                 'samesite' => 'Lax',
             ]);
         }
-    }
-
-    public static function pluginInstall(): void
-    {
-        // Plugin installation logic
-        // Tables will be created via migrations
-    }
-
-    public static function pluginUpdate(?string $oldVersion, ?string $newVersion): void
-    {
-        // Plugin update logic
-    }
-
-    public static function pluginUninstall(): void
-    {
-        // Plugin uninstallation logic
-        // Clean up is handled by the migration system
     }
 }

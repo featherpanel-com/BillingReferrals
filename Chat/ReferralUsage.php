@@ -18,8 +18,8 @@
 namespace App\Addons\billingreferrals\Chat;
 
 use App\App;
-use App\Chat\Database;
 use App\Chat\User;
+use App\Chat\Database;
 
 /**
  * Referral Usage chat model for tracking who used which referral code.
