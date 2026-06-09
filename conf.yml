@@ -4,7 +4,7 @@ plugin:
   description: 'A powerful referral system that rewards users with credits for inviting new users to the platform!'
   flags:
     - hasEvents
-  version: 1.5.4
+  version: 1.5.5
   target: v2
   author:
     - NaysKutzu
