@@ -18,7 +18,8 @@ import {
   CheckCircle2,
   X,
   QrCode,
-} from "lucide-vue-next";
+  ArrowLeft,
+} from "@lucide/vue";
 import {
   useReferralAdminAPI,
   type ReferralSettings,
@@ -156,6 +157,73 @@ onMounted(() => {
 <template>
   <div class="w-full h-full overflow-auto p-4 md:p-8 min-h-screen">
     <div class="container mx-auto max-w-6xl">
+      <!-- Code usage page -->
+      <template v-if="showUsage && selectedCode">
+        <div class="mb-6 flex items-center gap-3">
+          <Button variant="outline" size="icon" @click="closeUsage">
+            <ArrowLeft class="h-4 w-4" />
+          </Button>
+          <div>
+            <h1 class="text-2xl font-semibold">Code Usage</h1>
+            <p class="text-sm text-muted-foreground">{{ selectedCode.code }}</p>
+          </div>
+        </div>
+
+        <Card class="p-6 border-2 shadow-xl bg-card/50 backdrop-blur-sm">
+          <div v-if="loadingUsage && codeUsage.length === 0" class="flex items-center justify-center py-12">
+            <Loader2 class="h-8 w-8 animate-spin" />
+          </div>
+
+          <div v-else-if="codeUsage.length === 0" class="text-center py-12 text-muted-foreground">
+            No users yet
+          </div>
+
+          <div v-else class="space-y-2">
+            <div
+              v-for="user in codeUsage"
+              :key="user.id"
+              class="flex items-center justify-between p-4 border rounded-lg"
+            >
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-green-500/10">
+                  <CheckCircle2 class="h-4 w-4 text-green-600" />
+                </div>
+                <div>
+                  <div class="font-medium">{{ user.username || user.email || 'Unknown' }}</div>
+                  <div class="text-sm text-muted-foreground">Joined {{ formatDate(user.created_at) }}</div>
+                </div>
+              </div>
+              <Badge class="bg-green-500/10 text-green-600">
+                +{{ settings?.referrer_credits || 0 }} credits
+              </Badge>
+            </div>
+          </div>
+
+          <div v-if="Math.ceil(usageTotal / 20) > 1" class="flex items-center justify-center gap-2 mt-6">
+            <Button
+              @click="loadCodeUsage(selectedCode!, usagePage - 1)"
+              :disabled="usagePage === 1"
+              variant="outline"
+              size="sm"
+            >
+              <ChevronLeft class="h-4 w-4" />
+            </Button>
+            <span class="text-sm text-muted-foreground">
+              Page {{ usagePage }} of {{ Math.ceil(usageTotal / 20) }} ({{ usageTotal }} total)
+            </span>
+            <Button
+              @click="loadCodeUsage(selectedCode!, usagePage + 1)"
+              :disabled="usagePage >= Math.ceil(usageTotal / 20)"
+              variant="outline"
+              size="sm"
+            >
+              <ChevronRight class="h-4 w-4" />
+            </Button>
+          </div>
+        </Card>
+      </template>
+
+      <template v-else>
       <div class="mb-6 text-center md:text-left">
         <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           Referral System - Admin
@@ -447,79 +515,7 @@ onMounted(() => {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <!-- Code Usage Modal -->
-      <div
-        v-if="showUsage && selectedCode"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-        @click.self="closeUsage"
-      >
-        <Card class="w-full max-w-2xl m-4 max-h-[80vh] overflow-auto border-2 shadow-xl bg-card/50 backdrop-blur-sm">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h3 class="text-lg font-semibold">Code Usage</h3>
-                <p class="text-sm text-muted-foreground">{{ selectedCode.code }}</p>
-              </div>
-              <Button @click="closeUsage" variant="ghost" size="sm">
-                <X class="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div v-if="loadingUsage && codeUsage.length === 0" class="flex items-center justify-center py-12">
-              <Loader2 class="h-8 w-8 animate-spin" />
-            </div>
-
-            <div v-else-if="codeUsage.length === 0" class="text-center py-12 text-muted-foreground">
-              No users yet
-            </div>
-
-            <div v-else class="space-y-2">
-              <div
-                v-for="user in codeUsage"
-                :key="user.id"
-                class="flex items-center justify-between p-4 border rounded-lg"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="p-2 rounded-lg bg-green-500/10">
-                    <CheckCircle2 class="h-4 w-4 text-green-600" />
-                  </div>
-                  <div>
-                    <div class="font-medium">{{ user.username || user.email || 'Unknown' }}</div>
-                    <div class="text-sm text-muted-foreground">Joined {{ formatDate(user.created_at) }}</div>
-                  </div>
-                </div>
-                <Badge class="bg-green-500/10 text-green-600">
-                  +{{ settings?.referrer_credits || 0 }} credits
-                </Badge>
-              </div>
-            </div>
-
-            <!-- Pagination -->
-            <div v-if="Math.ceil(usageTotal / 20) > 1" class="flex items-center justify-center gap-2 mt-6">
-              <Button
-                @click="loadCodeUsage(selectedCode!, usagePage - 1)"
-                :disabled="usagePage === 1"
-                variant="outline"
-                size="sm"
-              >
-                <ChevronLeft class="h-4 w-4" />
-              </Button>
-              <span class="text-sm text-muted-foreground">
-                Page {{ usagePage }} of {{ Math.ceil(usageTotal / 20) }} ({{ usageTotal }} total)
-              </span>
-              <Button
-                @click="loadCodeUsage(selectedCode!, usagePage + 1)"
-                :disabled="usagePage >= Math.ceil(usageTotal / 20)"
-                variant="outline"
-                size="sm"
-              >
-                <ChevronRight class="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
+      </template>
     </div>
   </div>
 </template>

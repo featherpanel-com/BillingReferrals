@@ -16,7 +16,7 @@ import {
   DollarSign,
   AlertCircle,
   Link,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import {
   useReferralAPI,
   type ReferralStats,
